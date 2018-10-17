@@ -72,9 +72,9 @@ function addStudent(){
       var studentObj = {
             'name': studentName,
             'course': studentCourse,
-            'grade': studentGrade 
+            'grade': studentGrade,
+            'index': null
       }
-      console.log( studentObj );
       student_array.push( studentObj );
       clearAddStudentFormInputs();
       updateStudentList( student_array );
@@ -96,12 +96,16 @@ function renderStudentOnDom( studentList ){
       $('.student-list tbody').empty();
 
       for (var i=0; i<studentList.length; i++){
+      studentList[i]['index'] = i;
       var deleteButton = $('<button>', {
-                  'text': 'delete',
-                  'class': 'btn btn-danger btn-xs',
-                  on: 'click', function(){
-                  removeStudent;
+            'text': 'delete',
+            'class': 'btn btn-danger btn-xs',
+            on: {
+                  click: function(){
+                        removeStudent();
+                        $(event.currentTarget).closest('tr').remove();
                   }
+            }
       });
       var tableDataName = $('<td>').append(studentList[i]['name']);
       var tableDataCourse = $('<td>').append(studentList[i]['course']);
@@ -113,7 +117,11 @@ function renderStudentOnDom( studentList ){
 }
 
 function removeStudent(){
-      console.log('Student deleted');
+      console.log( 'clicked' );
+//       if( indexOf(index) === -1){
+//             return
+//       }
+//       student_array(index, 1);
 }
 
 /***************************************************************************************************
@@ -145,7 +153,7 @@ function calculateGradeAverage( studentList ){
  * @param: {number} average    the grade average
  * @returns {undefined} none
  */
+
 function renderGradeAverage( studentAvg ){
-      console.log(studentAvg);
       $('.avgGrade').text( studentAvg );
 }
