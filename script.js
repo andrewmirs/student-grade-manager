@@ -94,14 +94,26 @@ function clearAddStudentFormInputs(){
  */
 function renderStudentOnDom( studentList ){
       $('.student-list tbody').empty();
+
       for (var i=0; i<studentList.length; i++){
+      var deleteButton = $('<button>', {
+                  'text': 'delete',
+                  'class': 'btn btn-danger btn-xs',
+                  on: 'click', function(){
+                  removeStudent;
+                  }
+      });
       var tableDataName = $('<td>').append(studentList[i]['name']);
       var tableDataCourse = $('<td>').append(studentList[i]['course']);
       var tableDataGrade = $('<td>').append(studentList[i]['grade']);
-      var deleteButton = $('<td class="btn btn-danger btn-xs">').append('delete');
-      var tableRow = $('<tr>').append(tableDataName, tableDataCourse, tableDataGrade, deleteButton);
+      var tableRowDelete = $('<td>').append(deleteButton);
+      var tableRow = $('<tr>').append(tableDataName, tableDataCourse, tableDataGrade, tableRowDelete);
       $('.student-list').append(tableRow);
       }
+}
+
+function removeStudent(){
+      console.log('Student deleted');
 }
 
 /***************************************************************************************************
