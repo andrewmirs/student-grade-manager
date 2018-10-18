@@ -72,8 +72,7 @@ function addStudent(){
       var studentObj = {
             'name': studentName,
             'course': studentCourse,
-            'grade': studentGrade,
-            'index': null
+            'grade': studentGrade
       }
       student_array.push( studentObj );
       clearAddStudentFormInputs();
@@ -96,17 +95,18 @@ function renderStudentOnDom( studentList ){
       $('.student-list tbody').empty();
 
       for (var i=0; i<studentList.length; i++){
-      studentList[i]['index'] = i;
       var deleteButton = $('<button>', {
             'text': 'delete',
             'class': 'btn btn-danger btn-xs',
-            on: {
-                  click: function(){
-                        removeStudent();
-                        $(event.currentTarget).closest('tr').remove();
-                  }
-            }
       });
+      (function( button, index ){
+            var student = student_array[index];
+            button.click(function(){
+                  removeStudent( student );
+                  $(event.currentTarget).closest('tr').remove();
+                  renderGradeAverage( calculateGradeAverage(studentList) );
+            });
+      })( deleteButton, i );
       var tableDataName = $('<td>').append(studentList[i]['name']);
       var tableDataCourse = $('<td>').append(studentList[i]['course']);
       var tableDataGrade = $('<td>').append(studentList[i]['grade']);
@@ -116,12 +116,13 @@ function renderStudentOnDom( studentList ){
       }
 }
 
-function removeStudent(){
-      console.log( 'clicked' );
-//       if( indexOf(index) === -1){
-//             return
-//       }
-//       student_array(index, 1);
+function removeStudent( student ){
+      var index = student_array.indexOf(student);
+      console.log( index );
+     if ( index === -1 ){
+      return
+     }
+     student_array.splice(index,1);
 }
 
 /***************************************************************************************************
@@ -146,6 +147,9 @@ function calculateGradeAverage( studentList ){
            gradesTotal += parseFloat( studentList[student].grade );
       }
       studentAvg = parseInt(gradesTotal/studentList.length);
+      if (isNaN(studentAvg)){
+            studentAvg = 0;
+      }
       return studentAvg;
 }
 /***************************************************************************************************
