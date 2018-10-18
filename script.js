@@ -111,9 +111,8 @@ function renderGradeAverage( studentAvg ){
 
 // AJAX Call
 
-var key = {api_key:'BZYxWVMCOE'}
-
 function getData(){
+      var key = {api_key:'BZYxWVMCOE'}
     console.log('1) getData called from button click');
     var ajaxConfig = {
         data: key,
@@ -121,15 +120,24 @@ function getData(){
         method: 'POST',
         url: 'http://s-apis.learningfuze.com/sgt/get',
         success: function(result) {
-            
-            console.log('2) AJAX Success function called, with the following result:', result);
-
+            console.log(result.data);
+            var myJSON = JSON.stringify(result.data);
+            console.log(result.data.length);
+            for (var x=0; x < result.data.length; x++){
+                  var tempObj={
+                        'name': null,
+                        'course': null,
+                        'grade': null
+                  }
+                  tempObj['name'] = result.data[x]['name'];
+                  tempObj['grade'] = result.data[x]['grade'];
+                  tempObj['course'] = result.data[x]['course'];
+                  student_array.push(tempObj);
+            }
+            updateStudentList(student_array);
         }
+      
     }
-
-    console.log('3) Making AJAX request');
     $.ajax(ajaxConfig);
-
-    console.log('4) End of getData');
 }
 
