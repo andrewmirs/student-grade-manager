@@ -121,7 +121,6 @@ function getData(){
         method: 'POST',
         url: 'http://s-apis.learningfuze.com/sgt/get',
         success: function(result) {
-            var myJSON = JSON.stringify(result.data);
             for (var x=0; x < result.data.length; x++){
                   var tempObj={
                         'id': null,
@@ -154,6 +153,11 @@ function sendData( name, course, grade ){
       method: 'POST',
       url: 'http://s-apis.learningfuze.com/sgt/create',
       success: function(result){
+            if (result.success === false){
+                  for(var errorMsg=0; errorMsg< result.errors.length; errorMsg++){
+                        alert(result.errors[errorMsg]);
+                  }
+            }
             student_array[student_array.length-1]['id'] = result.new_id;
             }
       })
@@ -169,7 +173,9 @@ function deleteData( id ){
             method: 'POST',
             url: 'http://s-apis.learningfuze.com/sgt/delete',
             success: function(result){
-                  console.log(result);
+                 if (result.success === false){
+                       alert(result.errors[0]);
+                 }
             }
       })
 }
