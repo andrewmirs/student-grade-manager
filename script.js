@@ -12,6 +12,7 @@ var student_array=[];
 */
 function initializeApp(){
       addClickHandlersToElements();
+      getData();
 }
 
 /***************************************************************************************************
@@ -43,6 +44,7 @@ function addStudent(){
       student_array.push( studentObj );
       clearAddStudentFormInputs();
       updateStudentList( student_array );
+      sendData(studentName, studentCourse, studentGrade);
 }
 
 function clearAddStudentFormInputs(){
@@ -65,6 +67,7 @@ function renderStudentOnDom( studentList ){
                   removeStudent( student );
                   $(event.currentTarget).closest('tr').remove();
                   renderGradeAverage( calculateGradeAverage(studentList) );
+                  deleteData(student.id);
             });
       })( deleteButton, i );
       var tableDataName = $('<td>').append(studentList[i]['name']);
@@ -78,7 +81,6 @@ function renderStudentOnDom( studentList ){
 
 function removeStudent( student ){
       var index = student_array.indexOf(student);
-      console.log( index );
      if ( index === -1 ){
       return
      }
@@ -113,22 +115,21 @@ function renderGradeAverage( studentAvg ){
 
 function getData(){
       var key = {api_key:'BZYxWVMCOE'}
-    console.log('1) getData called from button click');
     var ajaxConfig = {
         data: key,
         dataType: 'json',
         method: 'POST',
         url: 'http://s-apis.learningfuze.com/sgt/get',
         success: function(result) {
-            console.log(result.data);
             var myJSON = JSON.stringify(result.data);
-            console.log(result.data.length);
             for (var x=0; x < result.data.length; x++){
                   var tempObj={
+                        'id': null,
                         'name': null,
                         'course': null,
                         'grade': null
                   }
+                  tempObj['id'] = result.data[x]['id'];
                   tempObj['name'] = result.data[x]['name'];
                   tempObj['grade'] = result.data[x]['grade'];
                   tempObj['course'] = result.data[x]['course'];
@@ -139,5 +140,37 @@ function getData(){
       
     }
     $.ajax(ajaxConfig);
+}
+
+function sendData( name, course, grade ){
+      $.ajax({
+      dataType: 'json',
+      data: {
+            'api_key': 'BZYxWVMCOE',
+            'name': name,
+            'course': course,
+            'grade': grade
+            },
+      method: 'POST',
+      url: 'http://s-apis.learningfuze.com/sgt/create',
+      success: function(result){
+            student_array[student_array.length-1]['id'] = result.new_id;
+            }
+      })
+}
+
+function deleteData( id ){
+      $.ajax({
+            dataType: 'json',
+            data:{
+                  'api_key': 'BZYxWVMCOE',
+                  'student_id': id
+                  },
+            method: 'POST',
+            url: 'http://s-apis.learningfuze.com/sgt/delete',
+            success: function(result){
+                  console.log(result);
+            }
+      })
 }
 
