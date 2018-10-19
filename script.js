@@ -139,7 +139,7 @@ function sendData( name, course, grade ){
             'api_key': 'BZYxWVMCOE',
             'name': name,
             'course': course,
-            'grade': grade
+            'grade': grade,
             },
       method: 'POST',
       url: 'http://s-apis.learningfuze.com/sgt/create',
@@ -159,7 +159,10 @@ function sendData( name, course, grade ){
             clearAddStudentFormInputs();
             updateStudentList( student_array );
             student_array[student_array.length-1]['id'] = result.new_id;
-            }
+            },
+      error: function(result){
+            console.log(result);
+      }
       })
 }
 
@@ -180,6 +183,9 @@ function deleteData( id, student, location, studentList){
                  removeStudent( student );
                  $(location).closest('tr').remove();
                  renderGradeAverage( calculateGradeAverage(studentList) );
+            },
+            error: function(result){
+                  console.log(result);
             }
       })
 }
