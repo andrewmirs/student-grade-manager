@@ -36,15 +36,7 @@ function addStudent(){
       var studentName = $('#studentName').val();
       var studentCourse = $('#course').val();
       var studentGrade = $('#studentGrade').val();
-      var studentObj = {
-            'name': studentName,
-            'course': studentCourse,
-            'grade': studentGrade
-      }
-      student_array.push( studentObj );
-      clearAddStudentFormInputs();
-      updateStudentList( student_array );
-      sendData(studentName, studentCourse, studentGrade);
+      sendData(studentName, studentCourse, studentGrade); 
 }
 
 function clearAddStudentFormInputs(){
@@ -64,10 +56,9 @@ function renderStudentOnDom( studentList ){
       (function( button, index ){
             var student = student_array[index];
             button.click(function(){
-                  removeStudent( student );
-                  $(event.currentTarget).closest('tr').remove();
-                  renderGradeAverage( calculateGradeAverage(studentList) );
-                  deleteData(student.id);
+          
+
+                  deleteData(student.id, student, event.currentTarget, studentList);
             });
       })( deleteButton, i );
       var tableDataName = $('<td>').append(studentList[i]['name']);
@@ -157,13 +148,22 @@ function sendData( name, course, grade ){
                   for(var errorMsg=0; errorMsg< result.errors.length; errorMsg++){
                         alert(result.errors[errorMsg]);
                   }
-            }
+                  return;
+            } 
+            var studentObj = {
+                  'name': name,
+                  'course': course,
+                  'grade': grade
+                  }
+            student_array.push( studentObj );
+            clearAddStudentFormInputs();
+            updateStudentList( student_array );
             student_array[student_array.length-1]['id'] = result.new_id;
             }
       })
 }
 
-function deleteData( id ){
+function deleteData( id, student, location, studentList){
       $.ajax({
             dataType: 'json',
             data:{
@@ -175,7 +175,11 @@ function deleteData( id ){
             success: function(result){
                  if (result.success === false){
                        alert(result.errors[0]);
+                       return;
                  }
+                 removeStudent( student );
+                 $(location).closest('tr').remove();
+                 renderGradeAverage( calculateGradeAverage(studentList) );
             }
       })
 }
