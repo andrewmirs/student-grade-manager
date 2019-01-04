@@ -1,28 +1,14 @@
 $(document).ready( initializeApp );
 
+function initializeApp(){
+      getData();
+}
+
 // Globals
 
 var student_array=[];
 
-/***************************************************************************************************
-* initializeApp 
-* @params {undefined} none
-* @returns: {undefined} none
-* initializes the application, including adding click handlers and pulling in any data from the server, in later versions
-*/
-function initializeApp(){
-      addClickHandlersToElements();
-      getData();
-}
-
-/***************************************************************************************************
-* addClickHandlerstoElements
-* @params {undefined} 
-* @returns  {undefined}
-*     
-*/
-function addClickHandlersToElements(){
-}
+// Functions
 
 function handleAddClicked(){
       addStudent();
@@ -36,7 +22,7 @@ function addStudent(){
       var studentName = $('#studentName').val();
       var studentCourse = $('#course').val();
       var studentGrade = $('#studentGrade').val();
-      sendData(studentName, studentCourse, studentGrade); 
+      addData(studentName, studentCourse, studentGrade); 
 }
 
 function clearAddStudentFormInputs(){
@@ -81,7 +67,6 @@ function removeStudent( student ){
 function updateStudentList( studentList ){
       renderStudentOnDom( studentList );
       renderGradeAverage( calculateGradeAverage(studentList) );
-  
 }
 
 // Calculate and Render Student Data
@@ -102,27 +87,29 @@ function renderGradeAverage( studentAvg ){
       $('.avgGrade').text( studentAvg );
 }
 
-// AJAX Call
+// AJAX Calls
+
+      // Get list from DB
 
 function getData(){
-      var key = {api_key:'BZYxWVMCOE'}
+      var key = {api_key:'root'}
     var ajaxConfig = {
         data: key,
         dataType: 'json',
-        method: 'POST',
-        url: 'http://s-apis.learningfuze.com/sgt/get',
+        method: 'GET',
+        url: 'http://localhost:8888/php/index.php?action=read',
         success: function(result) {
-            for (var x=0; x < result.data.length; x++){
+            for (var x=0; x < result.students.length; x++){
                   var tempObj={
                         'id': null,
                         'name': null,
                         'course': null,
                         'grade': null
                   }
-                  tempObj['id'] = result.data[x]['id'];
-                  tempObj['name'] = result.data[x]['name'];
-                  tempObj['grade'] = result.data[x]['grade'];
-                  tempObj['course'] = result.data[x]['course'];
+                  tempObj['id'] = result.students[x]['id'];
+                  tempObj['name'] = result.students[x]['name'];
+                  tempObj['grade'] = result.students[x]['grade'];
+                  tempObj['course'] = result.students[x]['course'];
                   student_array.push(tempObj);
             }
             updateStudentList(student_array);
@@ -132,17 +119,19 @@ function getData(){
     $.ajax(ajaxConfig);
 }
 
-function sendData( name, course, grade ){
+      // Add a student to DB
+
+function addData( name, course, grade ){
       $.ajax({
       dataType: 'json',
       data: {
-            'api_key': 'BZYxWVMCOE',
+            'api_key': 'root',
             'name': name,
             'course': course,
             'grade': grade,
             },
       method: 'POST',
-      url: 'http://s-apis.learningfuze.com/sgt/create',
+      url: 'http://localhost:8888/php/index.php?action=create',
       success: function(result){
             if (result.success === false){
                   for(var errorMsg=0; errorMsg< result.errors.length; errorMsg++){
@@ -165,6 +154,8 @@ function sendData( name, course, grade ){
       }
       })
 }
+
+      // Remove a student from DB
 
 function deleteData( id, student, location, studentList){
       $.ajax({
