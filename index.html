@@ -9,7 +9,7 @@
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
 </head>
 <body>
-<div class="update-modal-container">
+<div class="update-modal-container displaynone">
     <div class="update-modal-background"></div>
     <div class="update-modal">
         <div class="student-update-form col-xs-8 col-xs-offset-2">
@@ -20,14 +20,14 @@
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-user"></span>
                 </span>
-                <input type="text" class="form-control" name="studentName" id="studentName" placeholder="Student Name">
+                <input type="text" class="form-control" name="updateName" id="updateName" placeholder="Student Name">
             </div>
             <br>
             <div class="input-group">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-list-alt"></span>
                 </span>
-                <input type="text" class="form-control" name="course" id="course"
+                <input type="text" class="form-control" name="updateCourse" id="updateCourse"
                         placeholder="Student Course">
             </div>
             <br>
@@ -35,7 +35,7 @@
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-education"></span>
                 </span>
-                <input type="number" min="0" max="100" class="form-control" name="studentGrade" id="studentGrade"
+                <input type="number" min="0" max="100" class="form-control" name="updateGrade" id="updateGrade"
                         placeholder="Student Grade">
             </div>
             <br>
@@ -44,13 +44,13 @@
                     <button type="button" class="btn btn-warning" onclick="">Update</button>
                 </div>
                 <div class="col-xs-6">
-                    <button type="button" class="btn btn-danger" onclick="cancelUpdate()">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="handleCancelUpdate()">Cancel</button>
                 </div>
             </div>       
         </div>
     </div>
 </div>
-<div class="sgt-main-blur container">
+<div class="container">
     <div class="row page-header">
         <!-- only show this element when the isnt on mobile -->
         <h1 class="col-lg-12 hidden-sm hidden-xs">Student Grade Table
