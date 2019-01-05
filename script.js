@@ -18,6 +18,14 @@ function handleCancelClick(){
       clearAddStudentFormInputs();
 }
 
+function handleEditClick( studentInfo ){
+      $(".container").addClass("sgt-main-blur");
+      $(".update-modal-container").removeClass("displaynone");
+      $('#updateName').val(studentInfo.name);
+      $('#updateCourse').val(studentInfo.course);
+      $('#updateGrade').val(studentInfo.grade);
+}
+
 function handleCancelUpdate(){
       $(".container").removeClass("sgt-main-blur");
       $(".update-modal-container").addClass("displaynone");
@@ -31,6 +39,7 @@ function addStudent(){
       var studentName = $('#studentName').val();
       var studentCourse = $('#course').val();
       var studentGrade = $('#studentGrade').val();
+      console.log('Add student info:', studentName, studentCourse, studentGrade);
       addData(studentName, studentCourse, studentGrade); 
 }
 
@@ -49,6 +58,16 @@ function renderStudentOnDom( studentList ){
             'text': 'edit',
             'class': 'btn btn-warning btn-xs',
       });
+
+      (function( button, index ){
+            var student = student_array[index];
+            button.click(function(){
+          
+                  handleEditClick(student);
+                  
+            });
+      })( editButton, i );
+
             
       var deleteButton = $('<button>', {
             'text': 'delete',
@@ -58,9 +77,9 @@ function renderStudentOnDom( studentList ){
       (function( button, index ){
             var student = student_array[index];
             button.click(function(){
-          
 
                   deleteData(student.id, student, event.currentTarget, studentList);
+
             });
       })( deleteButton, i );
 
