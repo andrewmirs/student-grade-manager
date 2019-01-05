@@ -1,0 +1,38 @@
+
+/* Update Modal */
+
+.update-modal-container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 3;
+}
+
+.update-modal-background {
+    height: 100%;
+    width: 100%;
+    background-color: whitesmoke;
+    opacity: .8;
+}
+
+.update-modal {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+}
+
+.student-update-form {
+    top: 20%;
+}
+
+.sgt-main-blur{
+    filter: blur(5px);
+}
+
+.displaynone {
+    display: none;
+}

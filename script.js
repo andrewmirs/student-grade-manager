@@ -18,6 +18,15 @@ function handleCancelClick(){
       clearAddStudentFormInputs();
 }
 
+function handleCancelUpdate(){
+      $(".container").removeClass("sgt-main-blur");
+      $(".update-modal-container").addClass("displaynone");
+}
+
+function cancelUpdate(){
+      console.log('Update canceled!')
+}
+
 function addStudent(){
       var studentName = $('#studentName').val();
       var studentCourse = $('#course').val();
@@ -35,10 +44,17 @@ function renderStudentOnDom( studentList ){
       $('.student-list tbody').empty();
 
       for (var i=0; i<studentList.length; i++){
+      
+      var editButton = $('<button>', {
+            'text': 'edit',
+            'class': 'btn btn-warning btn-xs',
+      });
+            
       var deleteButton = $('<button>', {
             'text': 'delete',
             'class': 'btn btn-danger btn-xs',
       });
+
       (function( button, index ){
             var student = student_array[index];
             button.click(function(){
@@ -47,11 +63,13 @@ function renderStudentOnDom( studentList ){
                   deleteData(student.id, student, event.currentTarget, studentList);
             });
       })( deleteButton, i );
+
       var tableDataName = $('<td>').append(studentList[i]['name']);
       var tableDataCourse = $('<td>').append(studentList[i]['course']);
       var tableDataGrade = $('<td>').append(studentList[i]['grade']);
+      var tableRowEdit = $('<td>').append(editButton);
       var tableRowDelete = $('<td>').append(deleteButton);
-      var tableRow = $('<tr>').append(tableDataName, tableDataCourse, tableDataGrade, tableRowDelete);
+      var tableRow = $('<tr>').append(tableDataName, tableDataCourse, tableDataGrade, tableRowEdit, tableRowDelete);
       $('.student-list').append(tableRow);
       }
 }
@@ -113,6 +131,7 @@ function getData(){
                   student_array.push(tempObj);
             }
             updateStudentList(student_array);
+            console.log('Current students in DB:', result);
         }
       
     }
@@ -161,11 +180,11 @@ function deleteData( id, student, location, studentList){
       $.ajax({
             dataType: 'json',
             data:{
-                  'api_key': 'BZYxWVMCOE',
-                  'student_id': id
+                  'api_key': 'root',
+                  'id': id
                   },
             method: 'POST',
-            url: 'http://s-apis.learningfuze.com/sgt/delete',
+            url: 'http://localhost:8888/php/index.php?action=delete',
             success: function(result){
                  if (result.success === false){
                        alert(result.errors[0]);
