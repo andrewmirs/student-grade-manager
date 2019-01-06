@@ -48,7 +48,37 @@ function addStudent(){
       var studentName = $('#studentName').val();
       var studentCourse = $('#course').val();
       var studentGrade = $('#studentGrade').val();
-      console.log('Add student info:', studentName, studentCourse, studentGrade);
+      var errors = 0;
+
+      if ( !regexTest( studentName, rawRegex.nameRegex )){
+            $('.error-name').text('Needs to be at least 2 characters. Letters only.');
+            errors++;
+      } else {
+            $('.error-name').text('');
+      }
+      
+      if ( !regexTest( studentCourse, rawRegex.nameRegex )){
+            $('.error-course').text('Needs to be at least 2 characters. Letters only.');
+            errors++;
+      } else {
+            $('.error-course').text('');
+      }
+
+      if ( !regexTest( studentGrade, rawRegex.gradeRegex )){
+            $('.error-grade').text('Needs to be a whole number between 0 and 100.');
+            errors++;
+      } else {
+            $('.error-grade').text('');
+      }
+
+      if( errors > 0){
+            return
+      }
+      
+      errors = 0;
+      $('.error-name').text('');
+      $('.error-course').text('');
+      $('.error-grade').text('');
       addData(studentName, studentCourse, studentGrade); 
 }
 
@@ -71,14 +101,11 @@ function renderStudentOnDom( studentList ){
       (function( button, index ){
             var student = student_array[index];
             button.click(function(){
-          
                   handleEditClick(student);
-                  update_student_id = student.id
-                  
+                  update_student_id = student.id  
             });
       })( editButton, i );
-
-            
+   
       var deleteButton = $('<button>', {
             'text': 'delete',
             'class': 'btn btn-danger btn-xs',
@@ -87,9 +114,7 @@ function renderStudentOnDom( studentList ){
       (function( button, index ){
             var student = student_array[index];
             button.click(function(){
-
                   deleteData(student.id, student, event.currentTarget, studentList);
-
             });
       })( deleteButton, i );
 
@@ -114,6 +139,20 @@ function removeStudent( student ){
 function updateStudentList( studentList ){
       renderStudentOnDom( studentList );
       renderGradeAverage( calculateGradeAverage(studentList) );
+}
+
+// Regex Test for Inputs
+
+var rawRegex = {
+      nameRegex: /[a-zA-Z]{2,25}/,
+      gradeRegex: /^[0-9][0-9]?$|^100$/
+}
+
+function regexTest(str, regEx, caseSensitive = false) {
+      if (!caseSensitive) {
+          str = String(str).toLowerCase();
+      }
+      return regEx.test(str);
 }
 
 // Calculate and Render Student Data
