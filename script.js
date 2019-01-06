@@ -6,7 +6,8 @@ function initializeApp(){
 
 // Globals
 
-var student_array=[];
+var student_array = [];
+var update_student_id = null;
 
 // Functions
 
@@ -26,13 +27,21 @@ function handleEditClick( studentInfo ){
       $('#updateGrade').val(studentInfo.grade);
 }
 
-function handleCancelUpdate(){
+function handleUpdateClick(){
+      var updateName = $('#updateName').val();
+      var updateCourse = $('#updateCourse').val();
+      var updateGrade = $('#updateGrade').val();
+      updateData( update_student_id, updateName, updateCourse, updateGrade );
+      update_student_id = null;
+
       $(".container").removeClass("sgt-main-blur");
       $(".update-modal-container").addClass("displaynone");
 }
 
-function cancelUpdate(){
-      console.log('Update canceled!')
+function handleCancelUpdate(){
+      $(".container").removeClass("sgt-main-blur");
+      $(".update-modal-container").addClass("displaynone");
+      update_student_id = null;
 }
 
 function addStudent(){
@@ -64,6 +73,7 @@ function renderStudentOnDom( studentList ){
             button.click(function(){
           
                   handleEditClick(student);
+                  update_student_id = student.id
                   
             });
       })( editButton, i );
@@ -186,6 +196,45 @@ function addData( name, course, grade ){
             clearAddStudentFormInputs();
             updateStudentList( student_array );
             student_array[student_array.length-1]['id'] = result.new_id;
+            },
+      error: function(result){
+            console.log(result);
+      }
+      })
+}
+
+      // Update student in DB
+
+function updateData( id, name, course, grade ){
+      $.ajax({
+      dataType: 'json',
+      data: {
+            'api_key': 'root',
+            'id': id,
+            'name': name,
+            'course': course,
+            'grade': grade,
+            },
+      method: 'POST',
+      url: 'http://localhost:8888/php/index.php?action=update',
+      success: function(result){
+            if (result.success === false){
+                  for(var errorMsg=0; errorMsg< result.errors.length; errorMsg++){
+                        alert(result.errors[errorMsg]);
+                  }
+                  return;
+            } else if (result.success === true){
+                  for (var i=0; i<student_array.length; i++){
+                        if (student_array[i].id === id){
+                              student_array[i].name = name;
+                              student_array[i].course = course;
+                              student_array[i].grade = grade;
+                        }
+                  }
+            }
+            
+            updateStudentList( student_array );
+            // student_array[student_array.length-1]['id'] = result.new_id;
             },
       error: function(result){
             console.log(result);
