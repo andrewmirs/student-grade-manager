@@ -17,6 +17,7 @@ function handleAddClicked(){
 
 function handleCancelClick(){
       clearAddStudentFormInputs();
+      resetErrors();
 }
 
 function handleEditClick( studentInfo ){
@@ -31,6 +32,37 @@ function handleUpdateClick(){
       var updateName = $('#updateName').val();
       var updateCourse = $('#updateCourse').val();
       var updateGrade = $('#updateGrade').val();
+
+      var errors = 0;
+
+      if ( !regexTest( updateName, rawRegex.nameRegex )){
+            $('.error-updateName').text('Needs to be at least 2 characters. Letters only.');
+            errors++;
+      } else {
+            $('.error-updateName').text('');
+      }
+      
+      if ( !regexTest( updateCourse, rawRegex.nameRegex )){
+            $('.error-updateCourse').text('Needs to be at least 2 characters. Letters only.');
+            errors++;
+      } else {
+            $('.error-updateCourse').text('');
+      }
+
+      if ( !regexTest( updateGrade, rawRegex.gradeRegex )){
+            $('.error-updateGrade').text('Needs to be a whole number between 0 and 100.');
+            errors++;
+      } else {
+            $('.error-updateGrade').text('');
+      }
+
+      if( errors > 0){
+            return
+      }
+      
+      errors = 0;
+
+
       updateData( update_student_id, updateName, updateCourse, updateGrade );
       update_student_id = null;
 
@@ -42,6 +74,7 @@ function handleCancelUpdate(){
       $(".container").removeClass("sgt-main-blur");
       $(".update-modal-container").addClass("displaynone");
       update_student_id = null;
+      resetErrors();
 }
 
 function addStudent(){
@@ -76,10 +109,17 @@ function addStudent(){
       }
       
       errors = 0;
+      resetErrors();
+      addData(studentName, studentCourse, studentGrade); 
+}
+
+function resetErrors(){
       $('.error-name').text('');
       $('.error-course').text('');
       $('.error-grade').text('');
-      addData(studentName, studentCourse, studentGrade); 
+      $('.error-updateName').text('');
+      $('.error-updateCourse').text('');
+      $('.error-updateGrade').text('');
 }
 
 function clearAddStudentFormInputs(){
