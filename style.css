@@ -59,10 +59,6 @@ h3 small {
     font-size: 55%;
 }
 
-h4, th {
-    color: whitesmoke;
-}
-
 tr:nth-child(even){
     color: whitesmoke
 }
@@ -138,4 +134,10 @@ tr:nth-child(odd){
         background-position: center;
         background-repeat: repeat-y;
     }
+}
+
+/* Delete Modal */
+
+.delete-modal-title {
+    color: black;
 }

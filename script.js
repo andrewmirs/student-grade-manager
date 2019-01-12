@@ -8,6 +8,8 @@ function initializeApp(){
 
 var student_array = [];
 var update_student_id = null;
+var delete_student = null;
+var delete_target = null;
 
 // Functions
 
@@ -20,12 +22,12 @@ function handleCancelClick(){
       resetErrors();
 }
 
-function handleEditClick( studentInfo ){
+function handleEditClick( student ){
       $(".container").addClass("sgt-main-blur");
-      $(".update-modal-container").removeClass("displaynone");
-      $('#updateName').val(studentInfo.name);
-      $('#updateCourse').val(studentInfo.course);
-      $('#updateGrade').val(studentInfo.grade);
+      $(".update-modal-title").text(`Update Student: ${student.name}?`);
+      $('#updateName').val(student.name);
+      $('#updateCourse').val(student.course);
+      $('#updateGrade').val(student.grade);
 }
 
 function handleUpdateClick(){
@@ -41,14 +43,35 @@ function handleUpdateClick(){
       update_student_id = null;
 
       $(".container").removeClass("sgt-main-blur");
-      $(".update-modal-container").addClass("displaynone");
 }
 
 function handleCancelUpdate(){
       $(".container").removeClass("sgt-main-blur");
-      $(".update-modal-container").addClass("displaynone");
       update_student_id = null;
       resetErrors();
+}
+
+function handleDeleteModalClick(student, target){
+      $(".container").addClass("sgt-main-blur");
+      $(".delete-modal-title").text(`Are you sure you want to delete ${student.name}?`);
+      $("#deleteStudentName").val(student.name);
+      $("#deleteStudentCourse").val(student.course);
+      $("#deleteStudentGrade").val(student.grade);
+      delete_student = student;
+      delete_target = target;
+}
+
+function handleDeleteClick(){
+      deleteData(delete_student.id, delete_student, delete_target, student_array);
+      $(".container").removeClass("sgt-main-blur");
+      delete_student = null;
+      delete_target = null;
+}
+
+function handleCancelDelete(){
+      $(".container").removeClass("sgt-main-blur");
+      delete_student_id = null;
+      delete_target = null;
 }
 
 function addStudent(){
@@ -85,8 +108,11 @@ function renderStudentOnDom( studentList ){
       for (var i=0; i<studentList.length; i++){
       
       var editButton = $('<button>', {
+            'type': 'button',
             'text': 'edit',
             'class': 'btn btn-warning btn-xs',
+            'data-toggle': 'modal',
+            'data-target': '#updateModal'
       });
 
       (function( button, index ){
@@ -98,14 +124,17 @@ function renderStudentOnDom( studentList ){
       })( editButton, i );
    
       var deleteButton = $('<button>', {
+            'type': 'button',
             'text': 'delete',
             'class': 'btn btn-danger btn-xs',
+            'data-toggle': 'modal',
+            'data-target': '#deleteModal'
       });
 
       (function( button, index ){
             var student = student_array[index];
             button.click(function(){
-                  deleteData(student.id, student, event.currentTarget, studentList);
+                  handleDeleteModalClick( student, event.currentTarget )
             });
       })( deleteButton, i );
 
