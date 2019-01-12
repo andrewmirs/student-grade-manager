@@ -1,4 +1,72 @@
 
+body {
+    background-image: url('./images/chalkboard1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat-y;
+}
+
+.main-title {
+    font-family: 'Homemade Apple', cursive;
+}
+
+.wbhs-logo {
+    display: inline-block;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    top: 30px;
+    margin: 0 20px;
+    background-image: url('./images/wbhs.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.wbhs-logo-small {
+    display: inline-block;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    top: 30px;
+    margin: 0 20px;
+    background-image: url('./images/wbhs.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#sgm {
+    color: whitesmoke;
+    word-spacing: 3px;
+}
+
+#sgm-small {
+    color: whitesmoke;
+    font-size: 18px;
+    word-spacing: 3px;
+}
+
+#grade-avg {
+    color: rgb(164, 164, 164);
+}
+
+#grade-avg-small {
+    color: rgb(164, 164, 164);
+}
+
+h3 small {
+    font-size: 55%;
+}
+
+tr:nth-child(even){
+    color: whitesmoke
+}
+
+tr:nth-child(odd){
+    color:  rgb(164, 164, 164);
+}
+
 /* Update Modal */
 
 .update-modal-container {
@@ -11,8 +79,8 @@
 .update-modal-background {
     height: 100%;
     width: 100%;
-    background-color: whitesmoke;
-    opacity: .8;
+    background-color: #494949;
+    opacity: .9;
 }
 
 .update-modal {
@@ -23,6 +91,12 @@
     top: 50%;
     right: 50%;
     transform: translate(50%, -50%);
+}
+
+.update-title {
+    color: whitesmoke;
+    font-family: 'Homemade Apple';
+    word-spacing: 10px;
 }
 
 .student-update-form {
@@ -51,4 +125,19 @@
     color: #fff;
     background-color: rgb(0, 133, 0);
     border-color: rgb(0, 133, 0);
+}
+
+@media (max-width: 950px) {
+    body {
+        background-image: url('./images/chalkboard1.jpg');
+        background-size: unset;
+        background-position: center;
+        background-repeat: repeat-y;
+    }
+}
+
+/* Delete Modal */
+
+.delete-modal-title {
+    color: black;
 }

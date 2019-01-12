@@ -8,6 +8,8 @@ function initializeApp(){
 
 var student_array = [];
 var update_student_id = null;
+var delete_student = null;
+var delete_target = null;
 
 // Functions
 
@@ -20,12 +22,12 @@ function handleCancelClick(){
       resetErrors();
 }
 
-function handleEditClick( studentInfo ){
+function handleEditClick( student ){
       $(".container").addClass("sgt-main-blur");
-      $(".update-modal-container").removeClass("displaynone");
-      $('#updateName').val(studentInfo.name);
-      $('#updateCourse').val(studentInfo.course);
-      $('#updateGrade').val(studentInfo.grade);
+      $(".update-modal-title").text(`Update Student: ${student.name}?`);
+      $('#updateName').val(student.name);
+      $('#updateCourse').val(student.course);
+      $('#updateGrade').val(student.grade);
 }
 
 function handleUpdateClick(){
@@ -33,85 +35,57 @@ function handleUpdateClick(){
       var updateCourse = $('#updateCourse').val();
       var updateGrade = $('#updateGrade').val();
 
-      var errors = 0;
-
-      if ( !regexTest( updateName, rawRegex.nameRegex )){
-            $('.error-updateName').text('Needs to be at least 2 characters. Letters only.');
-            errors++;
-      } else {
-            $('.error-updateName').text('');
-      }
-      
-      if ( !regexTest( updateCourse, rawRegex.nameRegex )){
-            $('.error-updateCourse').text('Needs to be at least 2 characters. Letters only.');
-            errors++;
-      } else {
-            $('.error-updateCourse').text('');
-      }
-
-      if ( !regexTest( updateGrade, rawRegex.gradeRegex )){
-            $('.error-updateGrade').text('Needs to be a whole number between 0 and 100.');
-            errors++;
-      } else {
-            $('.error-updateGrade').text('');
-      }
-
-      if( errors > 0){
+      if(!updateInputTests( updateName, updateCourse, updateGrade )){
             return
       }
-      
-      errors = 0;
-
 
       updateData( update_student_id, updateName, updateCourse, updateGrade );
       update_student_id = null;
 
       $(".container").removeClass("sgt-main-blur");
-      $(".update-modal-container").addClass("displaynone");
 }
 
 function handleCancelUpdate(){
       $(".container").removeClass("sgt-main-blur");
-      $(".update-modal-container").addClass("displaynone");
       update_student_id = null;
       resetErrors();
+}
+
+function handleDeleteModalClick(student, target){
+      $(".container").addClass("sgt-main-blur");
+      $(".delete-modal-title").text(`Are you sure you want to delete ${student.name}?`);
+      $("#deleteStudentName").val(student.name);
+      $("#deleteStudentCourse").val(student.course);
+      $("#deleteStudentGrade").val(student.grade);
+      delete_student = student;
+      delete_target = target;
+}
+
+function handleDeleteClick(){
+      deleteData(delete_student.id, delete_student, delete_target, student_array);
+      $(".container").removeClass("sgt-main-blur");
+      delete_student = null;
+      delete_target = null;
+}
+
+function handleCancelDelete(){
+      $(".container").removeClass("sgt-main-blur");
+      delete_student_id = null;
+      delete_target = null;
 }
 
 function addStudent(){
       var studentName = $('#studentName').val();
       var studentCourse = $('#course').val();
       var studentGrade = $('#studentGrade').val();
-      var errors = 0;
 
-      if ( !regexTest( studentName, rawRegex.nameRegex )){
-            $('.error-name').text('Needs to be at least 2 characters. Letters only.');
-            errors++;
-      } else {
-            $('.error-name').text('');
-      }
-      
-      if ( !regexTest( studentCourse, rawRegex.nameRegex )){
-            $('.error-course').text('Needs to be at least 2 characters. Letters only.');
-            errors++;
-      } else {
-            $('.error-course').text('');
-      }
-
-      if ( !regexTest( studentGrade, rawRegex.gradeRegex )){
-            $('.error-grade').text('Needs to be a whole number between 0 and 100.');
-            errors++;
-      } else {
-            $('.error-grade').text('');
-      }
-
-      if( errors > 0){
+      if(!addInputTests( studentName, studentCourse, studentGrade )){
             return
       }
-      
-      errors = 0;
-      resetErrors();
-      addData(studentName, studentCourse, studentGrade); 
+
+      addData(studentName, studentCourse, studentGrade);
 }
+
 
 function resetErrors(){
       $('.error-name').text('');
@@ -134,8 +108,11 @@ function renderStudentOnDom( studentList ){
       for (var i=0; i<studentList.length; i++){
       
       var editButton = $('<button>', {
+            'type': 'button',
             'text': 'edit',
             'class': 'btn btn-warning btn-xs',
+            'data-toggle': 'modal',
+            'data-target': '#updateModal'
       });
 
       (function( button, index ){
@@ -147,14 +124,17 @@ function renderStudentOnDom( studentList ){
       })( editButton, i );
    
       var deleteButton = $('<button>', {
+            'type': 'button',
             'text': 'delete',
             'class': 'btn btn-danger btn-xs',
+            'data-toggle': 'modal',
+            'data-target': '#deleteModal'
       });
 
       (function( button, index ){
             var student = student_array[index];
             button.click(function(){
-                  deleteData(student.id, student, event.currentTarget, studentList);
+                  handleDeleteModalClick( student, event.currentTarget )
             });
       })( deleteButton, i );
 
@@ -195,6 +175,70 @@ function regexTest(str, regEx, caseSensitive = false) {
       return regEx.test(str);
 }
 
+function addInputTests( name, course, grade ){
+      var errors = 0;
+
+      if ( !regexTest( name, rawRegex.nameRegex )){
+            $('.error-name').text('Needs to be at least 2 characters. Letters only.');
+            errors++;
+      } else {
+            $('.error-name').text('');
+      }
+      
+      if ( !regexTest( course, rawRegex.nameRegex )){
+            $('.error-course').text('Needs to be at least 2 characters. Letters only.');
+            errors++;
+      } else {
+            $('.error-course').text('');
+      }
+
+      if ( !regexTest( grade, rawRegex.gradeRegex )){
+            $('.error-grade').text('Needs to be a whole number between 0 and 100.');
+            errors++;
+      } else {
+            $('.error-grade').text('');
+      }
+
+      if( errors > 0){
+            return false;
+      }
+
+      resetErrors();
+      return true;
+}
+
+function updateInputTests( name, course, grade ){
+      var errors = 0;
+
+      if ( !regexTest( name, rawRegex.nameRegex )){
+            $('.error-updateName').text('Needs to be at least 2 characters. Letters only.');
+            errors++;
+      } else {
+            $('.error-updateName').text('');
+      }
+      
+      if ( !regexTest( course, rawRegex.nameRegex )){
+            $('.error-updateCourse').text('Needs to be at least 2 characters. Letters only.');
+            errors++;
+      } else {
+            $('.error-updateCourse').text('');
+      }
+
+      if ( !regexTest( grade, rawRegex.gradeRegex )){
+            $('.error-updateGrade').text('Needs to be a whole number between 0 and 100.');
+            errors++;
+      } else {
+            $('.error-updateGrade').text('');
+      }
+
+      if( errors > 0){
+            return false;
+      }
+
+      resetErrors();
+      return true;
+}
+
 // Calculate and Render Student Data
 
 function calculateGradeAverage( studentList ){
@@ -219,12 +263,13 @@ function renderGradeAverage( studentAvg ){
 
 function getData(){
       var key = {api_key:'root'}
-    var ajaxConfig = {
-        data: key,
-        dataType: 'json',
-        method: 'GET',
-        url: 'http://localhost:8888/php/index.php?action=read',
-        success: function(result) {
+      var ajaxConfig = {
+            data: key,
+            dataType: 'json',
+            method: 'GET',
+            url: 'http://localhost:8888/php/index.php?action=read',
+            success: function(result) {
+            student_array=[];
             for (var x=0; x < result.students.length; x++){
                   var tempObj={
                         'id': null,
@@ -240,8 +285,8 @@ function getData(){
             }
             updateStudentList(student_array);
             console.log('Current students in DB:', result);
-        }
-      
+            }
+
     }
     $.ajax(ajaxConfig);
 }
@@ -250,35 +295,31 @@ function getData(){
 
 function addData( name, course, grade ){
       $.ajax({
-      dataType: 'json',
-      data: {
-            'api_key': 'root',
-            'name': name,
-            'course': course,
-            'grade': grade,
-            },
-      method: 'POST',
-      url: 'http://localhost:8888/php/index.php?action=create',
-      success: function(result){
-            if (result.success === false){
-                  for(var errorMsg=0; errorMsg< result.errors.length; errorMsg++){
-                        alert(result.errors[errorMsg]);
-                  }
-                  return;
-            } 
-            var studentObj = {
+            dataType: 'json',
+            data: {
+                  'api_key': 'root',
                   'name': name,
                   'course': course,
-                  'grade': grade
+                  'grade': grade,
+                  },
+            method: 'POST',
+            url: 'http://localhost:8888/php/index.php?action=create',
+            success: function(result){
+                  // Why is this happening???!?!?
+                  console.log('SUCCESSS!!');
+                  if (result.success === false){
+                        for(var errorMsg=0; errorMsg< result.errors.length; errorMsg++){
+                              alert(result.errors[errorMsg]);
+                        }
+                        return;
+                  } 
+                  
+                  },
+            error: function(result){
+                  console.log('Error triggered!')
+                  clearAddStudentFormInputs();
+                  getData();
                   }
-            student_array.push( studentObj );
-            clearAddStudentFormInputs();
-            updateStudentList( student_array );
-            student_array[student_array.length-1]['id'] = result.new_id;
-            },
-      error: function(result){
-            console.log(result);
-      }
       })
 }
 
@@ -286,38 +327,37 @@ function addData( name, course, grade ){
 
 function updateData( id, name, course, grade ){
       $.ajax({
-      dataType: 'json',
-      data: {
-            'api_key': 'root',
-            'id': id,
-            'name': name,
-            'course': course,
-            'grade': grade,
-            },
-      method: 'POST',
-      url: 'http://localhost:8888/php/index.php?action=update',
-      success: function(result){
-            if (result.success === false){
-                  for(var errorMsg=0; errorMsg< result.errors.length; errorMsg++){
-                        alert(result.errors[errorMsg]);
-                  }
-                  return;
-            } else if (result.success === true){
-                  for (var i=0; i<student_array.length; i++){
-                        if (student_array[i].id === id){
-                              student_array[i].name = name;
-                              student_array[i].course = course;
-                              student_array[i].grade = grade;
+            dataType: 'json',
+            data: {
+                  'api_key': 'root',
+                  'id': id,
+                  'name': name,
+                  'course': course,
+                  'grade': grade,
+                  },
+            method: 'POST',
+            url: 'http://localhost:8888/php/index.php?action=update',
+            success: function(result){
+                  if (result.success === false){
+                        for(var errorMsg=0; errorMsg< result.errors.length; errorMsg++){
+                              alert(result.errors[errorMsg]);
+                        }
+                        return;
+                  } else if (result.success === true){
+                        for (var i=0; i<student_array.length; i++){
+                              if (student_array[i].id === id){
+                                    student_array[i].name = name;
+                                    student_array[i].course = course;
+                                    student_array[i].grade = grade;
+                              }
                         }
                   }
+                  
+                  updateStudentList( student_array );
+                  },
+            error: function(result){
+                  console.log('Update error triggered!');
             }
-            
-            updateStudentList( student_array );
-            // student_array[student_array.length-1]['id'] = result.new_id;
-            },
-      error: function(result){
-            console.log(result);
-      }
       })
 }
 
