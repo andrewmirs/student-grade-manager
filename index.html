@@ -59,7 +59,7 @@
             </h3>
         </div>
         <div class="student-add-form col-lg-3 col-lg-push-9">
-            <h4>Add Student</h4>
+            <h4 id="add-student-title">Add Student</h4>
             <div class="input-group">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-user"></span>
@@ -114,7 +114,7 @@
         <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" onclick="handleCancelDelete()">&times;</button>
-            <h4 class="delete-modal-title">Delete Modal</h4>
+            <div class="wbhs-logo-delete"></div><h4 class="delete-modal-title">Are you sure you want to delete <span id="delete-modal-name"></span>?</h4>
         </div>
         <div class="modal-body">
             <div class="input-group">
@@ -155,7 +155,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" onclick="handleCancelUpdate()">&times;</button>
-                <h4 class="update-modal-title">Update Header</h4>
+                <div class="wbhs-logo-update"></div><h4 class="update-modal-title">Update Student: <span id="update-modal-name"></span></h4>
                 </div>
                 <div class="modal-body">
                     <div class="input-group">

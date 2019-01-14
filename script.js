@@ -24,7 +24,7 @@ function handleCancelClick(){
 
 function handleEditClick( student ){
       $(".container").addClass("sgt-main-blur");
-      $(".update-modal-title").text(`Update Student: ${student.name}?`);
+      $("#update-modal-name").text(`${student.name}`);
       $('#updateName').val(student.name);
       $('#updateCourse').val(student.course);
       $('#updateGrade').val(student.grade);
@@ -53,7 +53,7 @@ function handleCancelUpdate(){
 
 function handleDeleteModalClick(student, target){
       $(".container").addClass("sgt-main-blur");
-      $(".delete-modal-title").text(`Are you sure you want to delete ${student.name}?`);
+      $("#delete-modal-name").text(`${student.name}`);
       $("#deleteStudentName").val(student.name);
       $("#deleteStudentCourse").val(student.course);
       $("#deleteStudentGrade").val(student.grade);
