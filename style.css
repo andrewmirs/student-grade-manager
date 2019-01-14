@@ -10,10 +10,14 @@ body {
     font-family: 'Homemade Apple', cursive;
 }
 
+#add-student-title{
+    color: whitesmoke;
+}
+
 .wbhs-logo {
     display: inline-block;
     position: relative;
-    width: 100px;
+    width: 120px;
     height: 100px;
     top: 30px;
     margin: 0 20px;
@@ -24,12 +28,13 @@ body {
 }
 
 .wbhs-logo-small {
-    display: inline-block;
+    display: absolute;
     position: relative;
-    width: 100px;
-    height: 100px;
-    top: 30px;
-    margin: 0 20px;
+    width: 150px;
+    height: 100px; 
+    left: 0;
+    right: 0;
+    margin: auto;
     background-image: url('./images/wbhs.png');
     background-size: contain;
     background-position: center;
@@ -116,7 +121,57 @@ tr:nth-child(odd){
 .error {
     margin: 3px 0 0 0;
     font-size: 1.2rem;
-    color: red;
+    color: #dd7a7a;
+}
+
+/* Delete Modal */
+
+.wbhs-logo-delete {
+    display: inline-block;
+    position: relative;
+    width: 90px;
+    height: 30px;
+    top: 10px;
+    margin: 0;
+    background-image: url(./images/wbhs.png);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.delete-modal-title {
+    display: inline-block;
+    color: black;
+    font-size: 16px;
+}
+
+#delete-modal-name {
+    font-weight: bolder;
+}
+
+
+/* Update Modal */
+
+.wbhs-logo-update {
+    display: inline-block;
+    position: relative;
+    width: 90px;
+    height: 30px;
+    top: 10px;
+    margin: 0;
+    background-image: url(./images/wbhs.png);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.update-modal-title {
+   display: inline-block;
+   font-size: 16px;
+}
+
+#update-modal-name {
+    font-weight: bolder;
 }
 
 /* Extras */
@@ -128,16 +183,13 @@ tr:nth-child(odd){
 }
 
 @media (max-width: 950px) {
+    
     body {
         background-image: url('./images/chalkboard1.jpg');
         background-size: unset;
         background-position: center;
         background-repeat: repeat-y;
     }
-}
 
-/* Delete Modal */
 
-.delete-modal-title {
-    color: black;
 }
