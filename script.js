@@ -23,6 +23,7 @@ function handleCancelClick(){
 }
 
 function handleEditClick( student ){
+      // $("#updateModal").modal({backdrop: "static"});
       $(".container").addClass("sgt-main-blur");
       $("#update-modal-name").text(`${student.name}`);
       $('#updateName').val(student.name);
@@ -43,6 +44,7 @@ function handleUpdateClick(){
       update_student_id = null;
 
       $(".container").removeClass("sgt-main-blur");
+      $('#updateModal').modal('hide');
 }
 
 function handleCancelUpdate(){

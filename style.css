@@ -6,6 +6,10 @@ body {
     background-repeat: repeat-y;
 }
 
+th {
+    color: white;
+}
+
 .main-title {
     font-family: 'Homemade Apple', cursive;
 }
