@@ -2,6 +2,16 @@ $(document).ready( initializeApp );
 
 function initializeApp(){
       getData();
+      $('body').on('click', '#updateModal', function(event) {
+            if ($(event.target).attr('id') === 'updateModal') {
+                  handleCancelUpdate();
+            }
+      });
+      $('body').on('click', '#deleteModal', function(event) {
+            if ($(event.target).attr('id') === 'deleteModal') {
+                  handleCancelDelete();
+            }
+      });
 }
 
 // Globals
@@ -72,7 +82,7 @@ function handleDeleteClick(){
 
 function handleCancelDelete(){
       $(".container").removeClass("sgt-main-blur");
-      delete_student_id = null;
+      delete_student = null;
       delete_target = null;
 }
 
@@ -309,18 +319,11 @@ function addData( name, course, grade ){
             success: function(result){
                   // Why is this happening???!?!?
                   console.log('SUCCESSS!!');
-                  if (result.success === false){
-                        for(var errorMsg=0; errorMsg< result.errors.length; errorMsg++){
-                              alert(result.errors[errorMsg]);
-                        }
-                        return;
-                  } 
-                  
+                  clearAddStudentFormInputs();
+                  getData();
                   },
             error: function(result){
                   console.log('Error triggered!')
-                  clearAddStudentFormInputs();
-                  getData();
                   }
       })
 }
