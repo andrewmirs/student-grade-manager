@@ -176,7 +176,7 @@ function updateStudentList( studentList ){
 // Regex Test for Inputs
 
 var rawRegex = {
-      nameRegex: /[a-zA-Z]{2,25}/,
+      nameRegex: /^[A-Za-z ]{2,25}$/,
       gradeRegex: /^[0-9][0-9]?$|^100$/
 }
 
