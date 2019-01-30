@@ -279,7 +279,7 @@ function getData(){
             data: key,
             dataType: 'json',
             method: 'GET',
-            url: 'http://localhost:8888/php/index.php?action=read',
+            url: 'php/index.php?action=read',
             success: function(result) {
             student_array=[];
             for (var x=0; x < result.students.length; x++){
@@ -315,7 +315,7 @@ function addData( name, course, grade ){
                   'grade': grade,
                   },
             method: 'POST',
-            url: 'http://localhost:8888/php/index.php?action=create',
+            url: 'php/index.php?action=create',
             success: function(result){
                   // Why is this happening???!?!?
                   console.log('SUCCESSS!!');
@@ -341,7 +341,7 @@ function updateData( id, name, course, grade ){
                   'grade': grade,
                   },
             method: 'POST',
-            url: 'http://localhost:8888/php/index.php?action=update',
+            url: 'php/index.php?action=update',
             success: function(result){
                   if (result.success === false){
                         for(var errorMsg=0; errorMsg< result.errors.length; errorMsg++){
@@ -376,7 +376,7 @@ function deleteData( id, student, location, studentList){
                   'id': id
                   },
             method: 'POST',
-            url: 'http://localhost:8888/php/index.php?action=delete',
+            url: 'php/index.php?action=delete',
             success: function(result){
                  if (result.success === false){
                        alert(result.errors[0]);
