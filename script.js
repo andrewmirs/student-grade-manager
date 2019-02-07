@@ -296,7 +296,6 @@ function getData(){
                   student_array.push(tempObj);
             }
             updateStudentList(student_array);
-            console.log('Current students in DB:', result);
             }
 
     }
@@ -317,8 +316,6 @@ function addData( name, course, grade ){
             method: 'POST',
             url: 'php/index.php?action=create',
             success: function(result){
-                  // Why is this happening???!?!?
-                  console.log('SUCCESSS!!');
                   clearAddStudentFormInputs();
                   getData();
                   },

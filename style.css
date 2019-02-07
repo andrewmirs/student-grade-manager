@@ -56,6 +56,10 @@ th {
     word-spacing: 3px;
 }
 
+.sm-grade-margin {
+    margin: 20px 0 0 0;
+}
+
 #grade-avg {
     color: rgb(164, 164, 164);
 }
