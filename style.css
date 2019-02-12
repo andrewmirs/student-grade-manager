@@ -182,6 +182,16 @@ tr:nth-child(odd){
     font-weight: bolder;
 }
 
+/* Error Modal */
+
+.error-modal-title {
+    text-align: center;
+}
+
+.fa-exclamation-triangle {
+    color: #f0ad4e;
+}
+
 /* Extras */
 
 .btn-success {

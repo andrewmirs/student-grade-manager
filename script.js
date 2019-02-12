@@ -50,6 +50,9 @@ function handleUpdateClick(){
             return
       }
 
+      $('#update-button').text('Updating');
+      $('.update-btns').attr('disabled', 'disabled');
+
       updateData( update_student_id, updateName, updateCourse, updateGrade );
       update_student_id = null;
 
@@ -95,6 +98,9 @@ function addStudent(){
             return
       }
 
+      $('#add-button').text('Adding');
+      $('.add-btns').attr('disabled', 'disabled');
+
       addData(studentName, studentCourse, studentGrade);
 }
 
@@ -112,6 +118,10 @@ function clearAddStudentFormInputs(){
       $('#studentName').val('');
       $('#course').val('');
       $('#studentGrade').val('');
+}
+
+function toggleErrorModal(toggle){
+      $('#errorModal').modal(toggle);
 }
 
 function renderStudentOnDom( studentList ){
@@ -281,21 +291,25 @@ function getData(){
             method: 'GET',
             url: 'php/index.php?action=read',
             success: function(result) {
-            student_array=[];
-            for (var x=0; x < result.students.length; x++){
-                  var tempObj={
-                        'id': null,
-                        'name': null,
-                        'course': null,
-                        'grade': null
+                  student_array=[];
+                  for (var x=0; x < result.students.length; x++){
+                        var tempObj={
+                              'id': null,
+                              'name': null,
+                              'course': null,
+                              'grade': null
+                        }
+                        tempObj['id'] = result.students[x]['id'];
+                        tempObj['name'] = result.students[x]['name'];
+                        tempObj['grade'] = result.students[x]['grade'];
+                        tempObj['course'] = result.students[x]['course'];
+                        student_array.push(tempObj);
                   }
-                  tempObj['id'] = result.students[x]['id'];
-                  tempObj['name'] = result.students[x]['name'];
-                  tempObj['grade'] = result.students[x]['grade'];
-                  tempObj['course'] = result.students[x]['course'];
-                  student_array.push(tempObj);
-            }
-            updateStudentList(student_array);
+                  updateStudentList(student_array);
+            },
+            error: function(result){
+                  toggleErrorModal('show');
+                  console.log(result);
             }
 
     }
@@ -318,9 +332,14 @@ function addData( name, course, grade ){
             success: function(result){
                   clearAddStudentFormInputs();
                   getData();
+                  $('#add-button').text('Add');
+                  $('.add-btns').removeAttr('disabled');
                   },
             error: function(result){
-                  console.log('Error triggered!')
+                  toggleErrorModal('show');
+                  $('#add-button').text('Add');
+                  $('.add-btns').removeAttr('disabled');
+                  console.log(result);
                   }
       })
 }
@@ -354,11 +373,16 @@ function updateData( id, name, course, grade ){
                               }
                         }
                   }
-                  
+                  $('#update-button').text('Update');
+                  $('.update-btns').removeAttr('disabled');
+
                   updateStudentList( student_array );
                   },
             error: function(result){
-                  console.log('Update error triggered!');
+                  toggleErrorModal('show');
+                  $('#update-button').text('Update');
+                  $('.update-btns').removeAttr('disabled');
+                  console.log(result);
             }
       })
 }
@@ -384,6 +408,7 @@ function deleteData( id, student, location, studentList){
                  renderGradeAverage( calculateGradeAverage(studentList) );
             },
             error: function(result){
+                  toggleErrorModal('show');
                   console.log(result);
             }
       })
