@@ -80,6 +80,10 @@ tr:nth-child(odd){
     color:  rgb(164, 164, 164);
 }
 
+.page-header {
+    border-bottom: 0;
+}
+
 /* Update Modal */
 
 .update-modal-container {
